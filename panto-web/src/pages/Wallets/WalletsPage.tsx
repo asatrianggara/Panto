@@ -27,11 +27,18 @@ export default function WalletsPage() {
   const [editValue, setEditValue] = useState('');
   const [error, setError] = useState('');
   const [syncingId, setSyncingId] = useState<string | null>(null);
+  const [showGopayBind, setShowGopayBind] = useState(false);
+  const [gopayBindPhone, setGopayBindPhone] = useState('');
+  const [gopayBindLoading, setGopayBindLoading] = useState(false);
+  const [gopayBindStep, setGopayBindStep] = useState<'phone' | 'auth' | 'waiting' | 'done'>('phone');
+  const [gopayAuthUrl, setGopayAuthUrl] = useState('');
   const [showDanaBind, setShowDanaBind] = useState(false);
   const [danaBindPhone, setDanaBindPhone] = useState('');
   const [danaBindLoading, setDanaBindLoading] = useState(false);
   const [danaBindStep, setDanaBindStep] = useState<'phone' | 'auth' | 'authcode' | 'done'>('phone');
   const [danaUnlinking, setDanaUnlinking] = useState(false);
+  const [gopayUnlinking, setGopayUnlinking] = useState(false);
+  const [unlinkingId, setUnlinkingId] = useState<string | null>(null);
   const [danaAuthCode, setDanaAuthCode] = useState('');
   const [danaAuthUrl, setDanaAuthUrl] = useState('');
 
@@ -54,6 +61,8 @@ export default function WalletsPage() {
   const totalBalance = wallets.reduce((sum, w) => sum + (w.isActive ? w.balance : 0), 0);
   const danaWallet = wallets.find((w) => w.provider === 'dana');
   const hasDana = !!danaWallet;
+  const gopayWallet = wallets.find((w) => w.provider === 'gopay');
+  const hasGopay = !!gopayWallet;
 
   const handleLink = async () => {
     if (!linkPhone) return;
@@ -108,6 +117,42 @@ export default function WalletsPage() {
       setError('Gagal mengubah saldo');
     }
     setEditingBalance(null);
+  };
+
+  // ────────────────────────────
+  // GoPay Binding Flow
+  // ────────────────────────────
+
+  const handleGopayBind = async () => {
+    if (!gopayBindPhone) return;
+    setGopayBindLoading(true);
+    setError('');
+    try {
+      const res = await api.gopayStartBind(gopayBindPhone);
+      const data = res.data || res;
+
+      if (data.mode === 'real' && data.authUrl) {
+        localStorage.setItem('gopay_binding_phone', gopayBindPhone);
+        setGopayAuthUrl(data.authUrl);
+        window.open(data.authUrl, '_blank');
+        setGopayBindStep('waiting');
+        setGopayBindLoading(false);
+        return;
+      }
+
+      // Simulation mode — no credentials configured
+      setGopayBindStep('auth');
+      await new Promise((r) => setTimeout(r, 1800));
+      await api.gopaySimulateBind(gopayBindPhone);
+      setGopayBindStep('done');
+      fetchWallets();
+    } catch (err: unknown) {
+      const msg = (err as { response?: { data?: { message?: string } } })?.response?.data?.message;
+      setError(msg || 'Gagal menghubungkan GoPay');
+      setGopayBindStep('phone');
+    } finally {
+      setGopayBindLoading(false);
+    }
   };
 
   // ────────────────────────────
@@ -176,6 +221,30 @@ export default function WalletsPage() {
       setError('Gagal memutuskan DANA');
     } finally {
       setDanaUnlinking(false);
+    }
+  };
+
+  const handleGopayUnlink = async () => {
+    setGopayUnlinking(true);
+    try {
+      await api.gopayUnbind();
+      fetchWallets();
+    } catch {
+      setError('Gagal memutuskan GoPay');
+    } finally {
+      setGopayUnlinking(false);
+    }
+  };
+
+  const handleUnlinkWallet = async (wallet: Wallet) => {
+    setUnlinkingId(wallet.id);
+    try {
+      await api.unlinkWallet(wallet.id);
+      fetchWallets();
+    } catch {
+      setError('Gagal memutuskan wallet');
+    } finally {
+      setUnlinkingId(null);
     }
   };
 
@@ -255,6 +324,38 @@ export default function WalletsPage() {
       </div>
 
       {/* ══════════════════════════════════════════
+          GOPAY SECTION
+          ══════════════════════════════════════════ */}
+      {!hasGopay ? (
+        <GopayBindCard
+          show={showGopayBind}
+          onToggle={() => { setShowGopayBind(!showGopayBind); setGopayBindStep('phone'); setError(''); }}
+          phone={gopayBindPhone}
+          setPhone={setGopayBindPhone}
+          step={gopayBindStep}
+          loading={gopayBindLoading}
+          authUrl={gopayAuthUrl}
+          onBind={handleGopayBind}
+          onCheckStatus={() => { fetchWallets(); setGopayBindStep('phone'); setShowGopayBind(false); }}
+        />
+      ) : (
+        <WalletCard
+          wallet={gopayWallet}
+          syncing={syncingId === gopayWallet.id}
+          unlinking={gopayUnlinking}
+          editingBalance={editingBalance}
+          editValue={editValue}
+          onSync={() => handleSync(gopayWallet)}
+          onToggleRouting={() => handleToggleRouting(gopayWallet)}
+          onStartEdit={() => { setEditingBalance(gopayWallet.id); setEditValue(String(gopayWallet.balance)); }}
+          onEditChange={setEditValue}
+          onEditSave={() => handleBalanceSave(gopayWallet.id)}
+          onEditCancel={() => setEditingBalance(null)}
+          onUnlink={handleGopayUnlink}
+        />
+      )}
+
+      {/* ══════════════════════════════════════════
           DANA SECTION
           ══════════════════════════════════════════ */}
       {!hasDana ? (
@@ -287,12 +388,13 @@ export default function WalletsPage() {
           ══════════════════════════════════════════ */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 20 }}>
         {wallets
-          .filter((w) => w.provider !== 'dana')
+          .filter((w) => w.provider !== 'dana' && w.provider !== 'gopay')
           .map((wallet) => (
             <WalletCard
               key={wallet.id}
               wallet={wallet}
               syncing={syncingId === wallet.id}
+              unlinking={unlinkingId === wallet.id}
               editingBalance={editingBalance}
               editValue={editValue}
               onSync={() => handleSync(wallet)}
@@ -301,6 +403,7 @@ export default function WalletsPage() {
               onEditChange={setEditValue}
               onEditSave={() => handleBalanceSave(wallet.id)}
               onEditCancel={() => setEditingBalance(null)}
+              onUnlink={() => handleUnlinkWallet(wallet)}
             />
           ))}
       </div>
@@ -337,6 +440,198 @@ export default function WalletsPage() {
           onLink={handleLink}
           onClose={() => setShowLinkModal(false)}
         />
+      )}
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════════
+ * GoPay Bind Card — shown when GoPay is NOT linked
+ * ══════════════════════════════════════════════ */
+function GopayBindCard({
+  show, onToggle, phone, setPhone, step, loading, authUrl, onBind, onCheckStatus,
+}: {
+  show: boolean;
+  onToggle: () => void;
+  phone: string;
+  setPhone: (v: string) => void;
+  step: 'phone' | 'auth' | 'waiting' | 'done';
+  loading: boolean;
+  authUrl: string;
+  onBind: () => void;
+  onCheckStatus: () => void;
+}) {
+  return (
+    <div
+      style={{
+        borderRadius: 16, marginBottom: 16, overflow: 'hidden',
+        border: '2px dashed #00AA13',
+        backgroundColor: show ? '#f0fff4' : '#f7fdf7',
+        transition: 'all 0.2s',
+      }}
+    >
+      <button
+        onClick={onToggle}
+        style={{
+          width: '100%', display: 'flex', alignItems: 'center',
+          gap: 12, padding: 16, background: 'none', border: 'none',
+          cursor: 'pointer', textAlign: 'left',
+        }}
+      >
+        <WalletIcon provider="gopay" size={44} />
+        <div style={{ flex: 1 }}>
+          <p style={{ fontSize: 15, fontWeight: 700, color: '#1a1a2e' }}>
+            Hubungkan GoPay
+          </p>
+          <p style={{ fontSize: 12, color: '#6b7280' }}>
+            Link akun GoPay untuk split payment otomatis
+          </p>
+        </div>
+        <ExternalLink size={18} color="#00AA13" />
+      </button>
+
+      {show && (
+        <div style={{ padding: '0 16px 16px' }}>
+          <div style={{ borderTop: '1px solid #bbf7d0', paddingTop: 14 }}>
+
+            {step === 'phone' && (
+              <>
+                <div
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: 8,
+                    padding: '10px 12px', backgroundColor: '#dcfce7',
+                    borderRadius: 10, marginBottom: 14,
+                  }}
+                >
+                  <Shield size={16} color="#00AA13" />
+                  <p style={{ fontSize: 11, color: '#166534', fontWeight: 600, lineHeight: 1.4 }}>
+                    Panto akan terhubung ke akun GoPay kamu. Data kamu aman dan terenkripsi.
+                  </p>
+                </div>
+
+                {/* Placeholder deep-link button */}
+                <a
+                  href="https://www.gojek.com/gopay"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                    width: '100%', padding: '10px', marginBottom: 14,
+                    backgroundColor: '#dcfce7', borderRadius: 10,
+                    fontSize: 12, fontWeight: 700, color: '#00AA13',
+                    border: '1px solid #bbf7d0', textDecoration: 'none',
+                  }}
+                >
+                  <ExternalLink size={14} /> Buka Halaman GoPay
+                </a>
+
+                <label style={{ fontSize: 12, fontWeight: 600, color: '#6b7280', display: 'block', marginBottom: 6 }}>
+                  Nomor HP terdaftar di GoPay
+                </label>
+                <input
+                  type="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
+                  placeholder="08123456789"
+                  style={{
+                    width: '100%', padding: '12px 14px', backgroundColor: '#ffffff',
+                    borderRadius: 10, fontSize: 15, color: '#1a1a2e',
+                    border: '1px solid #bbf7d0', marginBottom: 12,
+                  }}
+                />
+                <button
+                  onClick={onBind}
+                  disabled={loading || !phone}
+                  style={{
+                    width: '100%', padding: '13px', borderRadius: 10,
+                    fontSize: 14, fontWeight: 700, border: 'none', cursor: 'pointer',
+                    backgroundColor: !phone ? '#86efac' : '#00AA13',
+                    color: '#ffffff',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                  }}
+                >
+                  Hubungkan Akun GoPay
+                </button>
+              </>
+            )}
+
+            {step === 'auth' && (
+              <div style={{ textAlign: 'center', padding: '20px 0' }}>
+                <Loader2
+                  size={32} color="#00AA13"
+                  style={{ animation: 'spin 1s linear infinite', marginBottom: 12 }}
+                />
+                <p style={{ fontSize: 14, fontWeight: 600, color: '#1a1a2e' }}>
+                  Menghubungkan GoPay...
+                </p>
+                <p style={{ fontSize: 12, color: '#6b7280', marginTop: 4 }}>
+                  Memverifikasi akun dan mengambil saldo
+                </p>
+              </div>
+            )}
+
+            {step === 'waiting' && (
+              <div style={{ textAlign: 'center', padding: '16px 0' }}>
+                <div
+                  style={{
+                    width: 52, height: 52, borderRadius: '50%',
+                    backgroundColor: '#dcfce7', display: 'flex',
+                    alignItems: 'center', justifyContent: 'center',
+                    margin: '0 auto 12px',
+                  }}
+                >
+                  <ExternalLink size={24} color="#00AA13" />
+                </div>
+                <p style={{ fontSize: 14, fontWeight: 700, color: '#1a1a2e', marginBottom: 4 }}>
+                  Halaman GoPay sudah dibuka
+                </p>
+                <p style={{ fontSize: 12, color: '#6b7280', marginBottom: 16, lineHeight: 1.5 }}>
+                  Selesaikan otorisasi di tab GoPay,<br />lalu kembali ke sini dan klik Periksa Status.
+                </p>
+                <div style={{ display: 'flex', gap: 8 }}>
+                  <button
+                    onClick={() => window.open(authUrl, '_blank')}
+                    style={{
+                      flex: 1, padding: '10px', borderRadius: 10,
+                      backgroundColor: '#dcfce7', border: '1px solid #bbf7d0',
+                      fontSize: 12, fontWeight: 700, color: '#00AA13', cursor: 'pointer',
+                    }}
+                  >
+                    Buka Ulang
+                  </button>
+                  <button
+                    onClick={onCheckStatus}
+                    style={{
+                      flex: 1, padding: '10px', borderRadius: 10,
+                      backgroundColor: '#00AA13', border: 'none',
+                      fontSize: 12, fontWeight: 700, color: '#fff', cursor: 'pointer',
+                    }}
+                  >
+                    Periksa Status
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {step === 'done' && (
+              <div style={{ textAlign: 'center', padding: '16px 0' }}>
+                <div
+                  style={{
+                    width: 48, height: 48, borderRadius: '50%',
+                    backgroundColor: '#00AA13', display: 'flex',
+                    alignItems: 'center', justifyContent: 'center',
+                    margin: '0 auto 10px', fontSize: 24, color: '#fff',
+                  }}
+                >
+                  ✓
+                </div>
+                <p style={{ fontSize: 14, fontWeight: 700, color: '#00AA13' }}>
+                  GoPay Terhubung!
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
       )}
     </div>
   );
@@ -699,11 +994,12 @@ function DanaLinkedCard({
  * Generic Wallet Card (non-DANA)
  * ══════════════════════════════════════════════ */
 function WalletCard({
-  wallet, syncing, editingBalance, editValue,
-  onSync, onToggleRouting, onStartEdit, onEditChange, onEditSave, onEditCancel,
+  wallet, syncing, unlinking, editingBalance, editValue,
+  onSync, onToggleRouting, onStartEdit, onEditChange, onEditSave, onEditCancel, onUnlink,
 }: {
   wallet: Wallet;
   syncing: boolean;
+  unlinking?: boolean;
   editingBalance: string | null;
   editValue: string;
   onSync: () => void;
@@ -712,13 +1008,14 @@ function WalletCard({
   onEditChange: (v: string) => void;
   onEditSave: () => void;
   onEditCancel: () => void;
+  onUnlink?: () => void;
 }) {
   const isEditing = editingBalance === wallet.id;
 
   return (
     <div
       style={{
-        backgroundColor: '#ffffff', borderRadius: 16,
+        backgroundColor: '#ffffff', borderRadius: 16, marginBottom: 16,
         padding: '16px', boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
       }}
     >
@@ -827,6 +1124,23 @@ function WalletCard({
             />
           </button>
         </div>
+
+        {onUnlink && (
+          <button
+            onClick={onUnlink}
+            disabled={unlinking}
+            style={{
+              display: 'flex', alignItems: 'center', gap: 4,
+              padding: '6px 12px', borderRadius: 8,
+              backgroundColor: '#fef2f2', border: 'none',
+              fontSize: 11, fontWeight: 700, color: '#ef4444',
+              cursor: unlinking ? 'default' : 'pointer',
+            }}
+          >
+            <Unlink size={12} />
+            {unlinking ? 'Memutus...' : 'Putuskan'}
+          </button>
+        )}
       </div>
     </div>
   );

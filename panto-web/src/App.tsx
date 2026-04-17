@@ -9,6 +9,7 @@ import HistoryPage from './pages/History/HistoryPage';
 import ProfilePage from './pages/Profile/ProfilePage';
 import ScanQRPage from './pages/Scan/ScanQRPage';
 import DanaCallbackPage from './pages/Dana/DanaCallbackPage';
+import GopayCallbackPage from './pages/Gopay/GopayCallbackPage';
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
         <Route element={<ProtectedRoute />}>
           <Route path="scan" element={<ScanQRPage />} />
           <Route path="dana/callback" element={<DanaCallbackPage />} />
+          <Route path="gopay/callback" element={<GopayCallbackPage />} />
           <Route element={<Layout />}>
             <Route index element={<HomePage />} />
             <Route path="wallets" element={<WalletsPage />} />

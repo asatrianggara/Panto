@@ -3,7 +3,8 @@
     "allow": [
       "Bash(curl -s http://localhost:3000/api/auth/login -X POST -H \"Content-Type: application/json\" -d '{\"phone\":\"08123456789\",\"pin\":\"123456\"}')",
       "Bash(python3 -m json.tool)",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "WebFetch(domain:snap-docs.midtrans.com)"
     ]
   }
 }

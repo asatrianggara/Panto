@@ -8,6 +8,7 @@ import { TransactionsModule } from './modules/transactions/transactions.module';
 import { PointsModule } from './modules/points/points.module';
 import { MerchantsModule } from './modules/merchants/merchants.module';
 import { DanaModule } from './modules/dana/dana.module';
+import { GoPayModule } from './modules/gopay/gopay.module';
 import { SeedModule } from './modules/seed/seed.module';
 
 @Module({
@@ -26,6 +27,7 @@ import { SeedModule } from './modules/seed/seed.module';
     PointsModule,
     MerchantsModule,
     DanaModule,
+    GoPayModule,
     SeedModule,
   ],
 })

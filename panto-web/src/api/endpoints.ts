@@ -101,6 +101,37 @@ export const getMerchants = async () => {
   return data;
 };
 
+// GoPay BI SNAP Integration
+export const gopayGetStatus = async () => {
+  const { data } = await client.get('/gopay/status');
+  return data;
+};
+
+export const gopayStartBind = async (phoneNumber: string) => {
+  const { data } = await client.post('/gopay/bind', { phoneNumber });
+  return data;
+};
+
+export const gopayCompleteBind = async (accountId: string, phoneNumber: string) => {
+  const { data } = await client.post('/gopay/bind/complete', { accountId, phoneNumber });
+  return data;
+};
+
+export const gopaySimulateBind = async (phoneNumber: string) => {
+  const { data } = await client.post('/gopay/bind/simulate', { phoneNumber });
+  return data;
+};
+
+export const gopayGetBalance = async () => {
+  const { data } = await client.post('/gopay/balance');
+  return data;
+};
+
+export const gopayUnbind = async () => {
+  const { data } = await client.post('/gopay/unbind');
+  return data;
+};
+
 // DANA Integration
 export const getDanaStatus = async () => {
   const { data } = await client.get('/dana/status');
