@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Panto — Smart Multi-Wallet Payment</title>
+    <meta name="description" content="Bayar apapun dengan semua e-wallet sekaligus. Gratis. Satu tap.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app" class="app-container">
+        <!-- ===== SPLASH SCREEN ===== -->
+        <div id="screen-splash" class="screen active">
+            <div class="splash-content">
+                <div class="splash-logo-wrapper">
+                    <div class="splash-logo">
+                        <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="logo-grad" x1="0" y1="0" x2="64" y2="64">
+                                    <stop offset="0%" stop-color="#6C5CE7"/>
+                                    <stop offset="100%" stop-color="#00CEFF"/>
+                                </linearGradient>
+                            </defs>
+                            <rect rx="16" width="64" height="64" fill="url(#logo-grad)"/>
+                            <path d="M18 20h28v4H22v6h20v4H22v10h-4V20z" fill="white" opacity="0.95"/>
+                            <circle cx="46" cy="44" r="6" fill="white" opacity="0.3"/>
+                            <circle cx="42" cy="40" r="6" fill="white" opacity="0.5"/>
+                        </svg>
+                    </div>
+                    <div class="splash-rings">
+                        <div class="ring ring-1"></div>
+                        <div class="ring ring-2"></div>
+                        <div class="ring ring-3"></div>
+                    </div>
+                </div>
+                <h1 class="splash-title">Panto</h1>
+                <p class="splash-tagline">Smart Multi-Wallet Payment</p>
+                <div class="splash-loader">
+                    <div class="loader-bar"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== ONBOARDING SCREEN ===== -->
+        <div id="screen-onboarding" class="screen">
+            <div class="onboarding-container">
+                <div class="onboarding-slides" id="onboarding-slides">
+                    <!-- Slide 1 -->
+                    <div class="onboarding-slide active" data-slide="0">
+                        <div class="slide-illustration">
+                            <div class="illustration-wallets">
+                                <div class="mini-wallet mw-1"><span>G</span></div>
+                                <div class="mini-wallet mw-2"><span>O</span></div>
+                                <div class="mini-wallet mw-3"><span>D</span></div>
+                                <div class="mini-wallet mw-4"><span>S</span></div>
+                                <div class="connect-lines"></div>
+                                <div class="center-hub">
+                                    <svg viewBox="0 0 40 40" width="40" height="40">
+                                        <rect rx="10" width="40" height="40" fill="url(#logo-grad)"/>
+                                        <path d="M11 12h18v3H14v4h12v3H14v7h-3V12z" fill="white"/>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <h2>Semua E-Wallet, Satu Aplikasi</h2>
+                        <p>Hubungkan GoPay, OVO, DANA, ShopeePay — kelola semua saldo dari satu tempat.</p>
+                    </div>
+                    <!-- Slide 2 -->
+                    <div class="onboarding-slide" data-slide="1">
+                        <div class="slide-illustration">
+                            <div class="illustration-scan">
+                                <div class="scan-frame">
+                                    <div class="scan-corner sc-tl"></div>
+                                    <div class="scan-corner sc-tr"></div>
+                                    <div class="scan-corner sc-bl"></div>
+                                    <div class="scan-corner sc-br"></div>
+                                    <div class="scan-line-anim"></div>
+                                    <div class="qr-mock">
+                                        <div class="qr-grid">
+                                            <span></span><span></span><span></span><span></span><span></span>
+                                            <span></span><span></span><span></span><span></span><span></span>
+                                            <span></span><span></span><span></span><span></span><span></span>
+                                            <span></span><span></span><span></span><span></span><span></span>
+                                            <span></span><span></span><span></span><span></span><span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <h2>Scan & Bayar Instan</h2>
+                        <p>Scan QRIS di merchant manapun. Panto otomatis mengurus sisanya.</p>
+                    </div>
+                    <!-- Slide 3 -->
+                    <div class="onboarding-slide" data-slide="2">
+                        <div class="slide-illustration">
+                            <div class="illustration-smart">
+                                <div class="smart-brain">
+                                    <div class="brain-pulse"></div>
+                                    <svg viewBox="0 0 60 60" width="60" height="60">
+                                        <circle cx="30" cy="30" r="28" fill="none" stroke="url(#logo-grad)" stroke-width="2"/>
+                                        <path d="M20 30 L27 37 L40 22" stroke="#00CEFF" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </div>
+                                <div class="smart-routes">
+                                    <div class="route r-1"><span>Rp100k</span><small>GoPay</small></div>
+                                    <div class="route r-2"><span>Rp120k</span><small>OVO</small></div>
+                                    <div class="route r-3"><span>Rp80k</span><small>DANA</small></div>
+                                </div>
+                            </div>
+                        </div>
+                        <h2>Smart Pay — Routing Cerdas</h2>
+                        <p>Algoritma pintar split pembayaran ke e-wallet yang optimal. Hemat maksimal, cashback maksimal.</p>
+                    </div>
+                </div>
+                <div class="onboarding-dots">
+                    <span class="dot active" data-dot="0"></span>
+                    <span class="dot" data-dot="1"></span>
+                    <span class="dot" data-dot="2"></span>
+                </div>
+                <button class="btn-primary btn-onboarding" id="btn-onboarding-next">Lanjut</button>
+                <button class="btn-ghost btn-skip" id="btn-onboarding-skip">Lewati</button>
+            </div>
+        </div>
+
+        <!-- ===== HOME SCREEN ===== -->
+        <div id="screen-home" class="screen">
+            <div class="home-header">
+                <div class="home-greeting">
+                    <p class="greeting-label">Selamat malam 👋</p>
+                    <h1 class="greeting-name">Aji</h1>
+                </div>
+                <div class="home-avatar" id="btn-profile">
+                    <span>A</span>
+                </div>
+            </div>
+
+            <div class="total-balance-card">
+                <div class="balance-bg-orb orb-1"></div>
+                <div class="balance-bg-orb orb-2"></div>
+                <p class="balance-label">Total Saldo</p>
+                <h2 class="balance-amount" id="total-balance">Rp 847.500</h2>
+                <p class="balance-sub">dari 4 e-wallet terhubung</p>
+                <div class="balance-actions">
+                    <button class="balance-action-btn" id="btn-scan-home">
+                        <div class="action-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M3 7V5a2 2 0 012-2h2M17 3h2a2 2 0 012 2v2M21 17v2a2 2 0 01-2 2h-2M7 21H5a2 2 0 01-2-2v-2"/>
+                                <rect x="7" y="7" width="10" height="10" rx="1"/>
+                            </svg>
+                        </div>
+                        <span>Scan QRIS</span>
+                    </button>
+                    <button class="balance-action-btn" id="btn-history">
+                        <div class="action-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12,6 12,12 16,14"/>
+                            </svg>
+                        </div>
+                        <span>Riwayat</span>
+                    </button>
+                    <button class="balance-action-btn" id="btn-bills">
+                        <div class="action-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                                <path d="M9 9h6M9 13h4"/>
+                            </svg>
+                        </div>
+                        <span>Tagihan</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="wallet-section">
+                <div class="section-header">
+                    <h3>E-Wallet Terhubung</h3>
+                    <button class="btn-link" id="btn-add-wallet">+ Tambah</button>
+                </div>
+                <div class="wallet-list" id="wallet-list">
+                    <div class="wallet-card" data-wallet="gopay">
+                        <div class="wallet-icon wi-gopay">
+                            <span>G</span>
+                        </div>
+                        <div class="wallet-info">
+                            <h4>GoPay</h4>
+                            <p class="wallet-balance">Rp 245.000</p>
+                        </div>
+                        <div class="wallet-status connected">
+                            <span class="status-dot"></span>
+                        </div>
+                    </div>
+                    <div class="wallet-card" data-wallet="ovo">
+                        <div class="wallet-icon wi-ovo">
+                            <span>O</span>
+                        </div>
+                        <div class="wallet-info">
+                            <h4>OVO</h4>
+                            <p class="wallet-balance">Rp 312.500</p>
+                        </div>
+                        <div class="wallet-status connected">
+                            <span class="status-dot"></span>
+                        </div>
+                    </div>
+                    <div class="wallet-card" data-wallet="dana">
+                        <div class="wallet-icon wi-dana">
+                            <span>D</span>
+                        </div>
+                        <div class="wallet-info">
+                            <h4>DANA</h4>
+                            <p class="wallet-balance">Rp 178.000</p>
+                        </div>
+                        <div class="wallet-status connected">
+                            <span class="status-dot"></span>
+                        </div>
+                    </div>
+                    <div class="wallet-card" data-wallet="shopeepay">
+                        <div class="wallet-icon wi-shopeepay">
+                            <span>S</span>
+                        </div>
+                        <div class="wallet-info">
+                            <h4>ShopeePay</h4>
+                            <p class="wallet-balance">Rp 112.000</p>
+                        </div>
+                        <div class="wallet-status connected">
+                            <span class="status-dot"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="recent-section">
+                <div class="section-header">
+                    <h3>Transaksi Terakhir</h3>
+                    <button class="btn-link">Lihat Semua</button>
+                </div>
+                <div class="transaction-list">
+                    <div class="transaction-item">
+                        <div class="tx-icon tx-food">🍕</div>
+                        <div class="tx-info">
+                            <h4>Pizza Hut Delivery</h4>
+                            <p>2 e-wallet · 5 menit lalu</p>
+                        </div>
+                        <div class="tx-amount">-Rp 189.000</div>
+                    </div>
+                    <div class="transaction-item">
+                        <div class="tx-icon tx-coffee">☕</div>
+                        <div class="tx-info">
+                            <h4>Kopi Kenangan</h4>
+                            <p>1 e-wallet · 2 jam lalu</p>
+                        </div>
+                        <div class="tx-amount">-Rp 35.000</div>
+                    </div>
+                    <div class="transaction-item">
+                        <div class="tx-icon tx-shop">🛍️</div>
+                        <div class="tx-info">
+                            <h4>Indomaret</h4>
+                            <p>3 e-wallet · Kemarin</p>
+                        </div>
+                        <div class="tx-amount">-Rp 267.400</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Nav -->
+            <nav class="bottom-nav">
+                <button class="nav-item active" data-nav="home">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1h-2z"/></svg>
+                    <span>Home</span>
+                </button>
+                <button class="nav-item" data-nav="wallets">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 10h20"/><circle cx="17" cy="14" r="1.5"/></svg>
+                    <span>Wallet</span>
+                </button>
+                <button class="nav-item nav-scan" id="btn-scan-nav">
+                    <div class="scan-btn-inner">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <path d="M3 7V5a2 2 0 012-2h2M17 3h2a2 2 0 012 2v2M21 17v2a2 2 0 01-2 2h-2M7 21H5a2 2 0 01-2-2v-2"/>
+                        </svg>
+                    </div>
+                    <span>Scan</span>
+                </button>
+                <button class="nav-item" data-nav="activity">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg>
+                    <span>Aktivitas</span>
+                </button>
+                <button class="nav-item" data-nav="profile">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    <span>Profil</span>
+                </button>
+            </nav>
+        </div>
+
+        <!-- ===== SCAN QRIS SCREEN ===== -->
+        <div id="screen-scan" class="screen">
+            <div class="scan-screen-header">
+                <button class="btn-back" id="btn-scan-back">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                </button>
+                <h2>Scan QRIS</h2>
+                <div class="placeholder-space"></div>
+            </div>
+            <div class="scan-viewport">
+                <div class="scan-area">
+                    <div class="scan-overlay"></div>
+                    <div class="scan-box">
+                        <div class="scan-corner sc-tl"></div>
+                        <div class="scan-corner sc-tr"></div>
+                        <div class="scan-corner sc-bl"></div>
+                        <div class="scan-corner sc-br"></div>
+                        <div class="scan-laser"></div>
+                    </div>
+                    <p class="scan-hint">Arahkan kamera ke kode QRIS</p>
+                </div>
+                <!-- Demo: simulated QR detection -->
+                <button class="btn-demo-scan" id="btn-demo-scan">
+                    <span>✨ Demo: Simulasi Scan</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- ===== SMART PAY SCREEN ===== -->
+        <div id="screen-smartpay" class="screen">
+            <div class="smartpay-header">
+                <button class="btn-back" id="btn-smartpay-back">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                </button>
+                <h2>Smart Pay</h2>
+                <div class="placeholder-space"></div>
+            </div>
+
+            <div class="smartpay-content">
+                <div class="merchant-info-card">
+                    <div class="merchant-icon">🏪</div>
+                    <div class="merchant-details">
+                        <h3 id="merchant-name">Kopi Kenangan</h3>
+                        <p id="merchant-id">QRIS • ID: MER-2026-KK-001</p>
+                    </div>
+                </div>
+
+                <div class="payment-amount-display">
+                    <p class="amount-label">Total Pembayaran</p>
+                    <h1 class="amount-value" id="payment-amount">Rp 300.000</h1>
+                </div>
+
+                <div class="smartpay-mode-toggle">
+                    <button class="mode-btn active" data-mode="smart" id="mode-smart">
+                        <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16"><path d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z"/></svg>
+                        Smart
+                    </button>
+                    <button class="mode-btn" data-mode="custom" id="mode-custom">
+                        <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/></svg>
+                        Custom
+                    </button>
+                </div>
+
+                <div class="split-section">
+                    <div class="split-header">
+                        <h3>Pembagian Pembayaran</h3>
+                        <div class="smart-badge" id="smart-badge">
+                            <svg viewBox="0 0 16 16" fill="currentColor" width="12" height="12"><path d="M8 1.5a1 1 0 01.894.553L10.382 5h3.118a1 1 0 01.707 1.707L11.5 9.414l1.106 3.316a1 1 0 01-1.54 1.08L8 11.798l-3.066 2.012a1 1 0 01-1.54-1.08L4.5 9.414 1.793 6.707A1 1 0 012.5 5h3.118l1.488-2.947A1 1 0 018 1.5z"/></svg>
+                            Optimal Split
+                        </div>
+                    </div>
+
+                    <div class="split-list" id="split-list">
+                        <div class="split-item" data-wallet="gopay">
+                            <div class="split-wallet-info">
+                                <div class="wallet-icon wi-gopay"><span>G</span></div>
+                                <div>
+                                    <h4>GoPay</h4>
+                                    <p class="split-balance">Saldo: Rp 245.000</p>
+                                </div>
+                            </div>
+                            <div class="split-amount-wrapper">
+                                <div class="split-amount" data-amount="150000">Rp 150.000</div>
+                                <div class="split-bar">
+                                    <div class="split-bar-fill" style="width: 50%"></div>
+                                </div>
+                                <div class="split-promo">🎯 Cashback 5%</div>
+                            </div>
+                        </div>
+
+                        <div class="split-item" data-wallet="ovo">
+                            <div class="split-wallet-info">
+                                <div class="wallet-icon wi-ovo"><span>O</span></div>
+                                <div>
+                                    <h4>OVO</h4>
+                                    <p class="split-balance">Saldo: Rp 312.500</p>
+                                </div>
+                            </div>
+                            <div class="split-amount-wrapper">
+                                <div class="split-amount" data-amount="100000">Rp 100.000</div>
+                                <div class="split-bar">
+                                    <div class="split-bar-fill" style="width: 33.3%"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="split-item" data-wallet="dana">
+                            <div class="split-wallet-info">
+                                <div class="wallet-icon wi-dana"><span>D</span></div>
+                                <div>
+                                    <h4>DANA</h4>
+                                    <p class="split-balance">Saldo: Rp 178.000</p>
+                                </div>
+                            </div>
+                            <div class="split-amount-wrapper">
+                                <div class="split-amount" data-amount="50000">Rp 50.000</div>
+                                <div class="split-bar">
+                                    <div class="split-bar-fill" style="width: 16.7%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="split-summary">
+                        <div class="summary-row">
+                            <span>Subtotal</span>
+                            <span>Rp 300.000</span>
+                        </div>
+                        <div class="summary-row highlight">
+                            <span>Biaya Admin</span>
+                            <span class="free-badge">GRATIS</span>
+                        </div>
+                        <div class="summary-row highlight">
+                            <span>Biaya Transaksi</span>
+                            <span class="free-badge">GRATIS</span>
+                        </div>
+                        <div class="summary-row total">
+                            <span>Total</span>
+                            <span>Rp 300.000</span>
+                        </div>
+                        <div class="savings-banner">
+                            <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16"><path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z" clip-rule="evenodd"/></svg>
+                            <span>Kamu hemat <strong>Rp 7.500</strong> dari biaya transfer!</span>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn-pay" id="btn-pay">
+                    <span class="btn-pay-text">Bayar Rp 300.000</span>
+                    <div class="btn-pay-shimmer"></div>
+                </button>
+            </div>
+        </div>
+
+        <!-- ===== PROCESSING SCREEN ===== -->
+        <div id="screen-processing" class="screen">
+            <div class="processing-content">
+                <div class="processing-animation">
+                    <div class="proc-ring proc-ring-1"></div>
+                    <div class="proc-ring proc-ring-2"></div>
+                    <div class="proc-ring proc-ring-3"></div>
+                    <div class="proc-center-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" width="32" height="32">
+                            <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                        </svg>
+                    </div>
+                </div>
+                <h2 class="proc-title">Memproses Pembayaran</h2>
+                <div class="proc-steps" id="proc-steps">
+                    <div class="proc-step" data-step="1">
+                        <div class="proc-step-icon"><div class="proc-spinner"></div></div>
+                        <span>Menarik dana dari GoPay...</span>
+                    </div>
+                    <div class="proc-step" data-step="2">
+                        <div class="proc-step-icon"><div class="proc-spinner"></div></div>
+                        <span>Menarik dana dari OVO...</span>
+                    </div>
+                    <div class="proc-step" data-step="3">
+                        <div class="proc-step-icon"><div class="proc-spinner"></div></div>
+                        <span>Menarik dana dari DANA...</span>
+                    </div>
+                    <div class="proc-step" data-step="4">
+                        <div class="proc-step-icon"><div class="proc-spinner"></div></div>
+                        <span>Membayar merchant via QRIS...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== SUCCESS / RECEIPT SCREEN ===== -->
+        <div id="screen-success" class="screen">
+            <div class="success-content">
+                <div class="success-header-bg">
+                    <div class="confetti-container" id="confetti-container"></div>
+                    <div class="success-check-wrapper">
+                        <div class="success-check-ring"></div>
+                        <div class="success-check">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <h2>Pembayaran Berhasil!</h2>
+                    <p class="success-amount">Rp 300.000</p>
+                </div>
+
+                <div class="receipt-card">
+                    <div class="receipt-header">
+                        <h3>Detail Transaksi</h3>
+                        <span class="receipt-id">TXN-20260409-001</span>
+                    </div>
+                    <div class="receipt-row">
+                        <span>Merchant</span>
+                        <span>Kopi Kenangan</span>
+                    </div>
+                    <div class="receipt-row">
+                        <span>Tanggal</span>
+                        <span id="receipt-date">9 Apr 2026, 23:20</span>
+                    </div>
+                    <div class="receipt-divider"></div>
+                    <div class="receipt-breakdown-title">Pembayaran dari:</div>
+                    <div class="receipt-wallet-row">
+                        <div class="rw-left">
+                            <div class="wallet-icon wi-gopay small"><span>G</span></div>
+                            <span>GoPay</span>
+                        </div>
+                        <span>Rp 150.000</span>
+                    </div>
+                    <div class="receipt-wallet-row">
+                        <div class="rw-left">
+                            <div class="wallet-icon wi-ovo small"><span>O</span></div>
+                            <span>OVO</span>
+                        </div>
+                        <span>Rp 100.000</span>
+                    </div>
+                    <div class="receipt-wallet-row">
+                        <div class="rw-left">
+                            <div class="wallet-icon wi-dana small"><span>D</span></div>
+                            <span>DANA</span>
+                        </div>
+                        <span>Rp 50.000</span>
+                    </div>
+                    <div class="receipt-divider"></div>
+                    <div class="receipt-row total">
+                        <span>Total</span>
+                        <span>Rp 300.000</span>
+                    </div>
+                    <div class="receipt-row">
+                        <span>Biaya</span>
+                        <span class="free-badge">GRATIS</span>
+                    </div>
+                    <div class="receipt-cashback">
+                        <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16"><path fill-rule="evenodd" d="M5 2a2 2 0 00-2 2v14l3.5-2 3.5 2 3.5-2 3.5 2V4a2 2 0 00-2-2H5zm2.5 3a1.5 1.5 0 100 3 1.5 1.5 0 000-3zm6.207.293a1 1 0 00-1.414 0l-6 6a1 1 0 101.414 1.414l6-6a1 1 0 000-1.414zM12.5 10a1.5 1.5 0 100 3 1.5 1.5 0 000-3z" clip-rule="evenodd"/></svg>
+                        <span>Cashback <strong>Rp 7.500</strong> dari GoPay akan masuk dalam 1x24 jam</span>
+                    </div>
+                </div>
+
+                <button class="btn-primary btn-done" id="btn-done">Kembali ke Home</button>
+                <button class="btn-ghost btn-share">Bagikan Struk</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
