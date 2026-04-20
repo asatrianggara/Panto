@@ -11,12 +11,18 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { colors, radius } from '../theme/colors';
 import { useAuthStore } from '../store/authStore';
 import * as api from '../api/endpoints';
+import type { RootStackParamList } from '../navigation/types';
+
+type LoginNavProp = NativeStackNavigationProp<RootStackParamList, 'Login'>;
 
 export default function LoginScreen() {
   const login = useAuthStore((s) => s.login);
+  const navigation = useNavigation<LoginNavProp>();
   const [isRegister, setIsRegister] = useState(false);
   const [phone, setPhone] = useState('');
   const [pin, setPin] = useState('');
@@ -31,9 +37,24 @@ export default function LoginScreen() {
       const data = isRegister
         ? await api.register(phone, name, pin)
         : await api.login(phone, pin);
+
+      // Shape A: direct token — behave as before.
       const token = data.accessToken || data.token;
-      if (!token) throw new Error('No token');
-      await login(token, data.user);
+      if (token) {
+        await login(token, data.user);
+        return;
+      }
+
+      // Shape B: OTP challenge — navigate to OTP screen.
+      if (data.otpToken) {
+        navigation.navigate('Otp', {
+          otpToken: data.otpToken,
+          phoneNumber: data.phoneNumber || phone,
+        });
+        return;
+      }
+
+      throw new Error('Invalid auth response');
     } catch (err: any) {
       setError(
         err?.response?.data?.message ||

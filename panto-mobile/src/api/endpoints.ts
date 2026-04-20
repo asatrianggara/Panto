@@ -2,14 +2,36 @@ import client from './client';
 
 const unwrap = <T>(res: { data: any }): T => (res.data?.data ?? res.data) as T;
 
+// Auth response may come as one of two shapes:
+// 1) OTP challenge: { otpToken, phoneNumber, expiresInSeconds }
+// 2) Direct token (legacy / admin / bypass): { accessToken|token, user }
+export type AuthResponse = {
+  accessToken?: string;
+  token?: string;
+  user?: any;
+  otpToken?: string;
+  phoneNumber?: string;
+  expiresInSeconds?: number;
+};
+
 export const login = async (phone: string, pin: string) => {
   const res = await client.post('/auth/login', { phone, pin });
-  return unwrap<{ accessToken?: string; token?: string; user: any }>(res);
+  return unwrap<AuthResponse>(res);
 };
 
 export const register = async (phone: string, name: string, pin: string) => {
   const res = await client.post('/auth/register', { phone, name, pin });
+  return unwrap<AuthResponse>(res);
+};
+
+export const verifyOtp = async (otpToken: string, otp: string) => {
+  const res = await client.post('/auth/otp/verify', { otpToken, otp });
   return unwrap<{ accessToken?: string; token?: string; user: any }>(res);
+};
+
+export const resendOtp = async (otpToken: string) => {
+  const res = await client.post('/auth/otp/resend', { otpToken });
+  return unwrap<{ otpToken: string; expiresInSeconds: number }>(res);
 };
 
 export const getMe = async () => {
