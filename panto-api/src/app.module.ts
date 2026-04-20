@@ -10,6 +10,7 @@ import { MerchantsModule } from './modules/merchants/merchants.module';
 import { DanaModule } from './modules/dana/dana.module';
 import { GoPayModule } from './modules/gopay/gopay.module';
 import { SeedModule } from './modules/seed/seed.module';
+import { AdminModule } from './modules/admin/admin.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { SeedModule } from './modules/seed/seed.module';
     DanaModule,
     GoPayModule,
     SeedModule,
+    AdminModule,
   ],
 })
 export class AppModule {}
