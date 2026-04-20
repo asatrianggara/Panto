@@ -1,0 +1,40 @@
+{
+  "expo": {
+    "name": "Panto",
+    "slug": "panto-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": false,
+    "splash": {
+      "resizeMode": "contain",
+      "backgroundColor": "#0047bf"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.panto.mobile",
+      "infoPlist": {
+        "NSCameraUsageDescription": "Panto needs camera access to scan QR codes for payment."
+      }
+    },
+    "android": {
+      "package": "com.panto.mobile",
+      "adaptiveIcon": {
+        "backgroundColor": "#0047bf"
+      },
+      "permissions": ["android.permission.CAMERA"]
+    },
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow Panto to access your camera to scan QR codes."
+        }
+      ]
+    ],
+    "extra": {
+      "apiBaseUrl": "https://imamdev.devdemo.win/api"
+    }
+  }
+}
