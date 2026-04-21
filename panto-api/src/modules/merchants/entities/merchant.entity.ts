@@ -16,7 +16,7 @@ export class Merchant {
   @Column({ nullable: true })
   category: string;
 
-  @Column({ type: 'integer', nullable: true })
+  @Column({ type: 'int', nullable: true })
   defaultBill: number;
 
   @Column({ nullable: true })

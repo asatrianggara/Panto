@@ -24,7 +24,7 @@ export class Wallet {
   @Column()
   providerPhone: string;
 
-  @Column({ type: 'integer', default: 0 })
+  @Column({ type: 'int', default: 0 })
   balance: number;
 
   @Column({ default: true })
@@ -33,7 +33,7 @@ export class Wallet {
   @Column({ default: true })
   inRouting: boolean;
 
-  @Column({ type: 'integer', default: 0 })
+  @Column({ type: 'int', default: 0 })
   transferFee: number;
 
   @Column({ type: 'datetime', nullable: true })

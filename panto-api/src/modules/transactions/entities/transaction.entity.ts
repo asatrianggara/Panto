@@ -24,16 +24,16 @@ export class Transaction {
   @Column({ nullable: true })
   merchantCategory: string;
 
-  @Column({ type: 'integer' })
+  @Column({ type: 'int' })
   totalAmount: number;
 
-  @Column({ type: 'integer', default: 0 })
+  @Column({ type: 'int', default: 0 })
   totalFee: number;
 
-  @Column({ type: 'integer', default: 0 })
+  @Column({ type: 'int', default: 0 })
   totalSaving: number;
 
-  @Column({ type: 'integer', default: 0 })
+  @Column({ type: 'int', default: 0 })
   pointsEarned: number;
 
   @Column({ default: 'pending' })

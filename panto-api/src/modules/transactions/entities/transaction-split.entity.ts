@@ -21,13 +21,13 @@ export class TransactionSplit {
   @Column()
   provider: string;
 
-  @Column({ type: 'integer' })
+  @Column({ type: 'int' })
   amount: number;
 
-  @Column({ type: 'integer', default: 0 })
+  @Column({ type: 'int', default: 0 })
   fee: number;
 
-  @Column({ type: 'integer', default: 0 })
+  @Column({ type: 'int', default: 0 })
   promoSaving: number;
 
   @Column({ default: 'pending' })

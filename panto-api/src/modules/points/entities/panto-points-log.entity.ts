@@ -19,10 +19,10 @@ export class PantoPointsLog {
   @Column()
   type: 'earn' | 'redeem' | 'bonus';
 
-  @Column({ type: 'integer' })
+  @Column({ type: 'int' })
   amount: number;
 
-  @Column({ type: 'integer' })
+  @Column({ type: 'int' })
   balanceAfter: number;
 
   @Column()
