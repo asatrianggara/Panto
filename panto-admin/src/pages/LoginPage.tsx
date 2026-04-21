@@ -59,10 +59,8 @@ export function LoginPage() {
       <Card className="w-full max-w-sm">
         <CardHeader>
           <div className="flex items-center gap-2 mb-2">
-            <div className="h-8 w-8 rounded-md bg-primary text-primary-foreground grid place-items-center font-bold">
-              P
-            </div>
-            <span className="font-semibold text-lg">Panto Admin</span>
+            <img src="/logo.svg" alt="Panto" className="h-8 w-auto" />
+            <span className="font-semibold text-muted-foreground">Admin</span>
           </div>
           <CardTitle className="text-xl">Sign in</CardTitle>
           <CardDescription>

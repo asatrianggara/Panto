@@ -49,10 +49,10 @@ export function Sidebar({ mobileOpen, onCloseMobile }: Props) {
       >
         <div className="flex h-14 items-center justify-between border-b px-4">
           <div className="flex items-center gap-2">
-            <div className="h-7 w-7 rounded-md bg-primary text-primary-foreground grid place-items-center font-bold">
-              P
-            </div>
-            <span className="font-semibold">Panto Admin</span>
+            <img src="/logo.svg" alt="Panto" className="h-7 w-auto" />
+            <span className="font-semibold text-sm text-muted-foreground">
+              Admin
+            </span>
           </div>
           <button
             onClick={onCloseMobile}
