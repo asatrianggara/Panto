@@ -17,7 +17,8 @@ async function bootstrap() {
     }),
   );
 
-  await app.listen(3000);
-  console.log('Panto API running on http://localhost:3000');
+  const port = Number(process.env.PORT) || 3000;
+  await app.listen(port);
+  console.log(`Panto API running on http://localhost:${port}`);
 }
 bootstrap();
