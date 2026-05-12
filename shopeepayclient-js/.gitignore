@@ -1,0 +1,6 @@
+node_modules/
+.session-shopee
+.env
+*.log
+vendor/shopee-node/dist/
+vendor/shopee-node/node_modules/
